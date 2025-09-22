@@ -25,8 +25,13 @@ public class SQLSubjectRepository : ISubjectRepository
     }
 
     public async Task<Subject?> CreateAsync(Subject subject)
-    {
+    {   
         await dBContext.Subjects.AddAsync(subject);
+        //  var irene = await dBContext.Subjects.AddAsync(subject);
+        // irene.Entity.Id = Guid.NewGuid();
+        // irene.Entity.SubjectName = subject.SubjectName;
+        // irene.Entity.SubjectCode = subject.SubjectCode;
+        // irene.Entity.Description = subject.Description;
         await dBContext.SaveChangesAsync();
         return subject;
     }

@@ -28,7 +28,15 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("id:Guid")]
+        public async Task<IActionResult> GetAll()
+        {
+            var subjects = await subjectRepository.GetAllAsync();
+            var subjectDto = mapper.Map<List<SubjectDto>>(subjects);
+            return Ok(subjectDto);
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var subject = await subjectRepository.GetByIdAsync(id);
@@ -49,6 +57,33 @@ namespace API.Controllers
             var SubjectDto = mapper.Map<SubjectDto>(subjectDomainModel);
             return CreatedAtAction(nameof(GetById), new { id = SubjectDto.Id }, SubjectDto);
 
+        }
+        [HttpPut]
+        [Route("{id:Guid}")]
+        [ValidateModel]
+        public async Task<IActionResult> UpdateSubject([FromRoute] Guid id, [FromBody] UpdateSubjectDto updateSubjectDto)
+        {
+            var subjectDomainModel = mapper.Map<Subject>(updateSubjectDto);
+            subjectDomainModel = await subjectRepository.UpdateAsync(id, subjectDomainModel);
+            if (subjectDomainModel == null)
+            {
+                return NotFound();
+            }
+            var SubjectDto = mapper.Map<SubjectDto>(subjectDomainModel);
+            return Ok(SubjectDto);
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteSubject([FromRoute] Guid id)
+        {
+            var subjectDomainModel = await subjectRepository.DeleteAsync(id);
+            if (subjectDomainModel == null)
+            {
+                return NotFound();
+            }
+            var SubjectDto = mapper.Map<SubjectDto>(subjectDomainModel);
+            return Ok(SubjectDto);
         }
     }
 }

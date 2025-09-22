@@ -41,15 +41,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    // STEP 1
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
 }
 
-// STEP 1
-app.UseSwagger();
-app.UseSwaggerUI();
 
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

@@ -9,7 +9,9 @@ public class AutoMappersProfile:Profile
 {
     public AutoMappersProfile()
     {
+        // SUBJECTS
         CreateMap<Subject, CreateSubjectDto>().ReverseMap();
         CreateMap<Subject, SubjectDto>().ReverseMap();
+        CreateMap<Subject, UpdateSubjectDto>().ReverseMap();
     }
 }
