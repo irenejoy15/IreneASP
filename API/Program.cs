@@ -32,6 +32,7 @@ builder.Services.AddDbContext<IreneDBContext>(options =>
 
 // STEP 4
 builder.Services.AddScoped<ISubjectRepository, SQLSubjectRepository>();
+builder.Services.AddScoped<ITeacherRepository, SQLTeacherRepository>();
 
 // STEP 4 AUTO MAPPER
 builder.Services.AddAutoMapper(typeof(AutoMappersProfile));
