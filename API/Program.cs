@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,42 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// STEP 7
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "NZWalks API",
+        Version = "v1",
+        Description = "API for managing NZ Walks"
+    });
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme
+                },
+                Scheme = "Oauth2",
+                Name = JwtBearerDefaults.AuthenticationScheme,
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
 
 //STEP 1
 builder.Services.AddEndpointsApiExplorer();
@@ -45,6 +82,9 @@ builder.Services.AddDbContext<IreneAuthDbContext>(options =>
 // STEP 4
 builder.Services.AddScoped<ISubjectRepository, SQLSubjectRepository>();
 builder.Services.AddScoped<ITeacherRepository, SQLTeacherRepository>();
+
+//STEP 7
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // STEP 4 AUTO MAPPER
 builder.Services.AddAutoMapper(typeof(AutoMappersProfile));
