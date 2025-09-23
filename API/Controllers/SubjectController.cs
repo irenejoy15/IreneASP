@@ -4,6 +4,7 @@ using API.Models.Domain;
 using API.Models.DTO;
 using API.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> GetAll()
         {
             var subjects = await subjectRepository.GetAllAsync();
@@ -37,6 +39,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var subject = await subjectRepository.GetByIdAsync(id);
@@ -50,6 +53,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> AddSubject([FromBody] CreateSubjectDto createSubjectDto)
         {
             var subjectDomainModel = mapper.Map<Subject>(createSubjectDto);
@@ -61,6 +65,7 @@ namespace API.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> UpdateSubject([FromRoute] Guid id, [FromBody] UpdateSubjectDto updateSubjectDto)
         {
             var subjectDomainModel = mapper.Map<Subject>(updateSubjectDto);
@@ -75,6 +80,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> DeleteSubject([FromRoute] Guid id)
         {
             var subjectDomainModel = await subjectRepository.DeleteAsync(id);

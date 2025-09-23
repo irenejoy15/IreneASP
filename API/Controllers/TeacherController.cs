@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using API.CustomActionFilters;
 using API.Models.DTO.Teacher;
 using API.Models.Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -28,6 +29,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> GetAll()
         {
             var teachers = await teacherRepository.GetAllAsync();
@@ -36,6 +38,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+       [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var teacher = await teacherRepository.GetByIdAsync(id);
@@ -48,6 +51,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> AddTeacher([FromBody] CreateTeacherDto createTeacherDto)
         {
             var teacherDomainModel = mapper.Map<Teacher>(createTeacherDto);
@@ -59,6 +63,7 @@ namespace API.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> UpdateTeacher([FromRoute] Guid id, [FromBody] CreateTeacherDto createTeacherDto)
         {
             var teacherDomainModel = mapper.Map<Teacher>(createTeacherDto);
@@ -73,6 +78,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
         public async Task<IActionResult> DeleteTeacher([FromRoute] Guid id)
         {
             var deleted = await teacherRepository.DeleteAsync(id);
