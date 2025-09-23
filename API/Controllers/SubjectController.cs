@@ -29,7 +29,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "SuperAdmin, User")]
         public async Task<IActionResult> GetAll()
         {
             var subjects = await subjectRepository.GetAllAsync();
