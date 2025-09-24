@@ -42,9 +42,16 @@ namespace API.Controllers
         {
             var studentHeaderDomainModel = mapper.Map<StudentHeader>(createStudentHeaderDto);
             studentHeaderDomainModel = await studentRepository.CreateAsync(studentHeaderDomainModel);
-            var studentHeaderDto = mapper.Map<StudentHeaderDto>(studentHeaderDomainModel);
+            var studentHeaderDto = mapper.Map<CreateStudentDto>(studentHeaderDomainModel);
             return Ok(studentHeaderDto);
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var studentHeaders = await studentRepository.GetAllAsync();
+            var studentHeaderDto = mapper.Map<List<StudentHeaderDto>>(studentHeaders);
+            return Ok(studentHeaderDto);
         }
     }
 }

@@ -44,7 +44,11 @@ public class SQLStudentRepository : IStudentRepository
 
     public async Task<List<StudentHeader>> GetAllAsync()
     {
-        return await dBContext.StudentHeaders.ToListAsync();
+        return await dBContext.StudentHeaders.
+        Include(sh => sh.StudentDetails).
+            ThenInclude(sd => sd.Subject).
+            Include(sh => sh.StudentDetails).ThenInclude(sd => sd.Teacher).
+            ToListAsync();
     }
 
     public async Task<StudentHeader?> GetByIdAsync(Guid id)
