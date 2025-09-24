@@ -1,6 +1,7 @@
 using System;
 using API.Models.Domain;
 using API.Models.DTO;
+using API.Models.DTO.Student;
 using API.Models.DTO.Teacher;
 using AutoMapper;
 
@@ -18,5 +19,11 @@ public class AutoMappersProfile:Profile
         // TEACHERS
         CreateMap<Teacher, CreateTeacherDto>().ReverseMap();
         CreateMap<Teacher, TeacherDto>().ReverseMap();
+
+        // STUDENTS
+        CreateMap<StudentHeader, StudentHeaderDto>().ReverseMap();
+        CreateMap<StudentDetail, StudentDetailDto>().ReverseMap();
+        CreateMap<CreateStudentDto, StudentHeader>().ReverseMap();
+        CreateMap<CreateStudentDetailDto, StudentDetail>().ReverseMap();
     }
 }

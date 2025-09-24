@@ -13,9 +13,16 @@ public class IreneDBContext : DbContext
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
 
+    public DbSet<StudentHeader> StudentHeaders { get; set; }
+    public DbSet<StudentDetail> StudentDetails { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<StudentHeader>()
+            .HasMany(sh => sh.StudentDetails)
+            .WithOne(sd => sd.StudentHeader);
         // var Subjects = new List<Subject>
         // {
         //     new Subject { Id = Guid.Parse("2f6692aa-5d98-4bba-8a34-c4da0cf5f0a7"), SubjectName = "Mathematics", SubjectCode = "MATH101", Description = "Basic Mathematics"  },

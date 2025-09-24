@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using API.Data;
 using API.Mappings;
 using API.Middleware;
@@ -76,6 +77,8 @@ builder.Services.AddDbContext<IreneAuthDbContext>(options =>
 // STEP 4
 builder.Services.AddScoped<ISubjectRepository, SQLSubjectRepository>();
 builder.Services.AddScoped<ITeacherRepository, SQLTeacherRepository>();
+builder.Services.AddScoped<IStudentRepository, SQLStudentRepository>();
+builder.Services.AddScoped<IStudentDetailRepository, SQLStudentDetailRepository>();
 
 //STEP 7
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
@@ -85,7 +88,12 @@ builder.Services.AddAutoMapper(typeof(AutoMappersProfile));
 
 // STEP 5 SEE API CONTROLLER
 
-// STEP 6 
+// STEP 6
+ builder.Services.AddControllersWithViews()
+    .AddJsonOptions(o => o.JsonSerializerOptions
+    .ReferenceHandler = ReferenceHandler.Preserve); 
+
+    
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
@@ -127,6 +135,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
 }
+
 
 
 app.UseMiddleware<ExceptionHandler>();
